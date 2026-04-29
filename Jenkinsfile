@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repo') {
-            steps {
-                git 'https://github.com/vkkprathik/cicd-project.git'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
