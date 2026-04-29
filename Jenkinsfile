@@ -2,10 +2,9 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Checkout') {
+        stage('Clone Repo') {
             steps {
-                checkout scm
+                git 'https://github.com/vkkprathik/cicd-project.git'
             }
         }
 
@@ -15,21 +14,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Stop Old App') {
             steps {
-                sh 'npm test'
+                sh 'pkill node || true'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Start App') {
             steps {
-                sh 'docker build -t cicd-project .'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                sh './scripts/deploy.sh'
+                sh 'nohup node app.js > app.log 2>&1 &'
             }
         }
     }
