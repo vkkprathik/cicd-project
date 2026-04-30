@@ -8,15 +8,21 @@ pipeline {
             }
         }
 
-        stage('Stop Old App') {
+        stage('Stop Old Container') {
             steps {
-                sh 'pkill node || true'
+                sh 'docker rm -f cicd-app || true'
             }
         }
 
-        stage('Start App') {
+        stage('Build Docker Image') {
             steps {
-                sh 'nohup node app.js > app.log 2>&1 &'
+                sh 'docker build -t cicd-app .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker run -d -p 3000:3000 --name cicd-app cicd-app'
             }
         }
     }
